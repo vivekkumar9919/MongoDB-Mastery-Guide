@@ -1065,7 +1065,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 ### Dataset
 
 ```javascript
-[
+db.orders.insertMany([
 { _id: 1, customer: "Amit",   amount: 500,  status: "done",    city: "Mumbai" },
 { _id: 2, customer: "Vivek",  amount: 800,  status: "pending", city: "Delhi" },
 { _id: 3, customer: "Amit",   amount: 300,  status: "done",    city: "Mumbai" },
@@ -1073,7 +1073,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 { _id: 5, customer: "Vivek",  amount: 200,  status: "done",    city: "Delhi" },
 { _id: 6, customer: "Amit",   amount: 700,  status: "pending", city: "Mumbai" },
 { _id: 7, customer: "Neha",   amount: 1000, status: "done",    city: "Bangalore" }
-]
+])
 ```
 
 ### Questions and Answers
