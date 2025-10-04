@@ -1,6 +1,6 @@
 # 🚀 MongoDB Mastery Guide: Comprehensive Topics for Developers 👨‍💻
 
-This README contains MongoDB interview questions and answers for a Software Developer profile with These questions cover various MongoDB concepts, including basic operations, data modeling, aggregation, performance optimization, and more.
+This README offers a curated collection of MongoDB questions along with clear answers, designed to help Software Developers deepen their understanding of MongoDB. It covers a wide range of topics, including basic operations, data modeling, aggregation, performance optimization, and other key concepts, all explained in a practical and easy-to-follow manner.
 
 ## Topics Covered:
 1. [MongoDB Basics](#t1)
@@ -15,6 +15,7 @@ This README contains MongoDB interview questions and answers for a Software Deve
 10. [Backup and Restore](#t10)
 11. [Security](#t11)
 12. [Monitoring and Debugging](#t12)
+13. [MongoDB Aggregation Practice Questions](#t13)
 
 ---
 
@@ -46,7 +47,7 @@ Data modeling in MongoDB is about designing schemas that suit your application n
 3. Leverage indexes for faster queries.
 
 ### Example of Embedding Data:
-```
+```javascript
 db.orders.insertOne({
   "orderId": 12345,
   "customer": { "name": "John Doe", "email": "john@example.com" },
@@ -58,7 +59,7 @@ db.orders.insertOne({
 ```
 
 ### Example of Referencing Data:
-```
+```javascript
 db.customers.insertOne({ "_id": "c1", "name": "John Doe", "email": "john@example.com" })
 db.orders.insertOne({
   "orderId": 12345,
@@ -82,14 +83,14 @@ Types of indexes in MongoDB include:
 - **Single Field Indexes**: These indexes are created on a single field, making queries on that field faster. For example, if you're querying the `sku` field frequently, an index on `sku` would speed up such queries.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "sku": 1 })
   ```
 
 - **Compound Indexes**: These indexes are created on multiple fields. MongoDB uses them when queries involve more than one field. Compound indexes can optimize queries that filter on multiple fields.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "sku": 1, "location.city": 1 })
   ```
 
@@ -98,14 +99,14 @@ Types of indexes in MongoDB include:
 - **Multikey Indexes**: These are used when a field contains an array, and MongoDB needs to index each element of the array. This is useful for queries that match on array elements.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "tags": 1 })
   ```
 
 - **Text Indexes**: MongoDB supports text search on string fields using text indexes. This allows you to search for words or phrases within a text field.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "description": "text" })
   ```
 
@@ -114,21 +115,21 @@ Types of indexes in MongoDB include:
 - **Hashed Indexes**: These indexes use a hash of the field value and are primarily used for shard key values in sharded clusters. They ensure an even distribution of data across shards.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "sku": "hashed" })
   ```
 
 - **Geospatial Indexes**: These indexes support location-based queries, such as finding products near a specific location using latitude and longitude coordinates.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "location": "2dsphere" })
   ```
 
 - **Wildcard Indexes**: These indexes allow indexing on all fields in a document, which is useful when you don't know in advance which fields will be queried.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "$**": 1 })
   ```
 
@@ -159,7 +160,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Basic Queries**: MongoDB allows you to query collections using a simple filter on fields. This returns all documents matching the filter criteria.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "sku": "12345" })
   ```
 
@@ -168,7 +169,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Equality Query**: You can also perform equality checks on multiple fields.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "sku": "12345", "status": "available" })
   ```
 
@@ -177,7 +178,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Comparison Queries**: MongoDB allows you to perform comparisons such as `$gt`, `$lt`, `$gte`, and `$lte` to filter documents based on numeric or date values.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "price": { "$gt": 100 } })
   ```
 
@@ -186,7 +187,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Logical Queries**: MongoDB allows logical operations using `$and`, `$or`, and `$nor` to combine multiple conditions.
 
   Example:
-  ```
+  ```javascript
   db.products.find({
     "$or": [
       { "price": { "$lt": 50 } },
@@ -200,7 +201,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Array Queries**: MongoDB allows you to query documents that contain arrays. You can match an element in an array or check for array length.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "tags": "sale" })
   ```
 
@@ -209,7 +210,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Projection**: In MongoDB, projection allows you to select specific fields to return in the result, excluding the ones you don't need.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "sku": "12345" }, { "price": 1, "name": 1 })
   ```
 
@@ -218,7 +219,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Sorting**: MongoDB allows you to sort the query results based on a field, either in ascending or descending order.
 
   Example:
-  ```
+  ```javascript
   db.products.find({}).sort({ "price": -1 })
   ```
 
@@ -227,7 +228,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Limit and Skip**: MongoDB allows you to limit the number of results returned and skip a certain number of results, useful for pagination.
 
   Example:
-  ```
+  ```javascript
   db.products.find({}).limit(10).skip(20)
   ```
 
@@ -236,7 +237,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Text Search Queries**: If you have a text index, MongoDB allows you to perform full-text search on string fields.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "$text": { "$search": "laptop" } })
   ```
 
@@ -245,7 +246,7 @@ MongoDB provides various ways to query data from the database. Below are the dif
 - **Geospatial Queries**: If you have a geospatial index, you can query documents based on location (latitude and longitude).
 
   Example:
-  ```
+  ```javascript
   db.products.find({
     "location": {
       "$near": {
@@ -271,7 +272,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$match**: Filters the documents based on specified criteria. This is similar to the `find` operation but more powerful since it can include complex queries and logical operations.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$match": { "category": "electronics" } }
   ])
@@ -282,7 +283,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$group**: Groups documents by a specified field, performing an aggregation operation on the grouped data, such as summing or averaging values.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$group": { "_id": "$category", "total_sales": { "$sum": "$sales" } } }
   ])
@@ -293,7 +294,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$project**: Reshapes the documents by including, excluding, or adding new fields.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$project": { "name": 1, "price": 1, "category": 1 } }
   ])
@@ -304,7 +305,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$sort**: Sorts the documents by specified fields, either ascending or descending.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$sort": { "price": -1 } }
   ])
@@ -315,7 +316,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$limit**: Limits the number of documents returned.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$limit": 5 }
   ])
@@ -326,7 +327,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$skip**: Skips a specified number of documents.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$skip": 10 }
   ])
@@ -337,7 +338,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$unwind**: Deconstructs an array field from the input documents to output one document for each element in the array.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$unwind": "$tags" }
   ])
@@ -348,7 +349,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$lookup**: Performs a left outer join to another collection. This is useful when you need to combine data from two collections.
 
   Example:
-  ```
+  ```javascript
   db.orders.aggregate([
     { "$lookup": {
       "from": "products",
@@ -364,7 +365,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$addFields**: Adds new fields to the documents. This is useful for adding computed values to the aggregation pipeline.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$addFields": { "discounted_price": { "$multiply": ["$price", 0.9] } } }
   ])
@@ -375,7 +376,7 @@ The aggregation framework uses a pipeline of stages where each stage performs an
 - **$count**: Counts the number of documents passed through the pipeline.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$count": "total_products" }
   ])
@@ -395,7 +396,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Indexing**: Indexes are essential for fast query performance. By creating appropriate indexes, MongoDB can quickly locate the documents without scanning the entire collection.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "sku": 1 })
   ```
 
@@ -404,7 +405,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Use Covered Queries**: A covered query is one where all the fields in the query are included in the index. This allows MongoDB to return the results directly from the index, without scanning the actual documents.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "sku": 1, "price": 1 })
   db.products.find({ "sku": "12345", "price": { "$gt": 100 } })
   ```
@@ -414,7 +415,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Use Projection to Limit Fields**: When querying, avoid returning unnecessary fields. Use projection to limit the fields returned to only the ones you need.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "sku": "12345" }, { "name": 1, "price": 1 })
   ```
 
@@ -423,7 +424,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Optimize Aggregation Pipelines**: When using the aggregation framework, ensure the pipeline stages are ordered optimally. For example, place `$match` and `$sort` as early as possible to reduce the amount of data passed through the pipeline.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$match": { "category": "electronics" } },
     { "$sort": { "price": -1 } },
@@ -436,7 +437,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Use Indexes with Aggregation**: When performing aggregations, use indexes to speed up the `$match` stage and other stages that can benefit from them.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "category": 1 })
   db.products.aggregate([
     { "$match": { "category": "electronics" } },
@@ -449,7 +450,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Avoid Large Joins in `$lookup`**: The `$lookup` stage can be expensive, especially when joining large collections. To optimize performance, limit the fields returned by the joined collection and use indexes on the join fields.
 
   Example:
-  ```
+  ```javascript
   db.orders.aggregate([
     { "$lookup": {
       "from": "products",
@@ -466,7 +467,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Sharding**: Sharding is a method of distributing data across multiple servers to ensure that a large dataset can be handled efficiently. Sharding is particularly useful when you have large datasets and high traffic.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "sku": 1 })
   db.products.shardCollection("products", { "sku": 1 })
   ```
@@ -476,7 +477,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Write Concern and Journaling**: If write performance is a concern, you can reduce the write concern to `1` (acknowledged by the primary only), but be aware that this increases the risk of data loss. Similarly, turning off journaling may improve performance but at the cost of data durability.
 
   Example:
-  ```
+  ```javascript
   db.products.insertOne({ "sku": "12345", "name": "Product 1" }, { writeConcern: { w: 1 } })
   ```
 
@@ -485,7 +486,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Connection Pooling**: Use connection pooling to reuse database connections rather than creating new ones for each request. This reduces the overhead of establishing new connections and improves overall performance.
 
   Example:
-  ```
+  ```javascript
   const client = new MongoClient(uri, { useUnifiedTopology: true, poolSize: 10 });
   ```
 
@@ -494,7 +495,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Limit the Use of `$unwind` and `$group`**: The `$unwind` and `$group` stages are powerful but can be slow when processing large datasets. Use them wisely and avoid them when possible.
 
   Example:
-  ```
+  ```javascript
   db.products.aggregate([
     { "$unwind": "$tags" },
     { "$group": { "_id": "$tags", "count": { "$sum": 1 } } }
@@ -515,7 +516,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
   - **Setting up a Replica Set**: A replica set is a group of MongoDB servers that maintain the same data. A replica set consists of one primary node and multiple secondary nodes. The primary node receives all write operations, and the secondaries replicate the data.
 
   Example:
-  ```
+  ```javascript
   rs.initiate()
   rs.add("secondary1:27017")
   rs.add("secondary2:27017")
@@ -526,7 +527,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Replication Reads**: By default, read operations are sent to the primary node. However, you can configure MongoDB to read from secondary nodes to distribute the read load.
 
   Example:
-  ```
+  ```javascript
   db.getMongo().setReadPref("secondary")
   ```
 
@@ -537,7 +538,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
   - **Sharding Key**: When you shard a collection, you choose a shard key. The shard key determines how the data is distributed across shards. It's crucial to choose an appropriate shard key to balance the data evenly across shards.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "category": 1 })
   db.products.shardCollection("products", { "category": 1 })
   ```
@@ -547,7 +548,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Config Servers**: MongoDB uses config servers to store metadata about the sharded cluster. These servers track the chunks of data and their distribution across the shards. A sharded cluster requires at least three config servers for redundancy.
 
   Example:
-  ```
+  ```javascript
   mongod --configsvr --replSet configReplSet --port 27019 --dbpath /data/config
   ```
 
@@ -556,7 +557,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Mongos**: `mongos` is the query router that acts as an interface between the application and the sharded cluster. It directs queries to the appropriate shard based on the shard key.
 
   Example:
-  ```
+  ```javascript
   mongos --configdb configReplSet/localhost:27019
   ```
 
@@ -567,7 +568,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
   - **Balancing**: MongoDB continuously balances data across shards to ensure even distribution. The balancer moves chunks of data between shards to avoid overloading any single shard.
 
   Example:
-  ```
+  ```javascript
   sh.status()
   ```
 
@@ -576,7 +577,7 @@ Performance optimization in MongoDB involves strategies to improve query speed, 
 - **Failover and Recovery in Replication**: In case the primary node fails, one of the secondary nodes is automatically promoted to become the new primary. This process is called automatic failover and ensures high availability for the application.
 
   Example:
-  ```
+  ```javascript
   rs.stepDown()
   ```
 
@@ -594,7 +595,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Starting a Transaction**: To start a transaction, you need to begin a session and use the `startTransaction` method. The session allows you to perform multiple operations within the same transaction.
 
   Example:
-  ```
+  ```javascript
   const session = client.startSession();
   session.startTransaction();
   ```
@@ -604,7 +605,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Performing Operations within a Transaction**: After starting a transaction, you can execute multiple operations (like inserts, updates, or deletes) on one or more collections. These operations will not be visible to other clients until the transaction is committed.
 
   Example:
-  ```
+  ```javascript
   const productsCollection = client.db("ecommerce").collection("products");
   productsCollection.updateOne({ "sku": "12345" }, { "$set": { "price": 200 } }, { session });
   productsCollection.insertOne({ "sku": "67890", "name": "New Product" }, { session });
@@ -615,7 +616,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Committing a Transaction**: Once all the operations have been executed successfully, you can commit the transaction to make the changes permanent.
 
   Example:
-  ```
+  ```javascript
   session.commitTransaction();
   session.endSession();
   ```
@@ -625,7 +626,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Rolling Back a Transaction**: If an error occurs or if the operations need to be undone, you can roll back the transaction. This ensures that no partial updates are saved to the database.
 
   Example:
-  ```
+  ```javascript
   session.abortTransaction();
   session.endSession();
   ```
@@ -635,7 +636,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Error Handling in Transactions**: In practice, it's important to handle errors during transactions to ensure that the transaction can be either committed or rolled back properly.
 
   Example:
-  ```
+  ```javascript
   try {
     session.startTransaction();
     productsCollection.updateOne({ "sku": "12345" }, { "$set": { "price": 200 } }, { session });
@@ -654,7 +655,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Transactions Across Multiple Shards**: MongoDB supports multi-shard transactions in sharded clusters. When performing a transaction that spans multiple shards, MongoDB ensures that all shards involved in the transaction are committed or rolled back together atomically.
 
   Example:
-  ```
+  ```javascript
   const ordersCollection = client.db("ecommerce").collection("orders");
   session.startTransaction();
   ordersCollection.updateOne({ "orderId": "abc123" }, { "$set": { "status": "shipped" } }, { session });
@@ -667,7 +668,7 @@ MongoDB supports multi-document transactions, which allow you to execute multipl
 - **Transaction Read Concern and Write Concern**: You can set read and write concerns for transactions to specify the level of consistency and durability required for the operations within the transaction.
 
   Example:
-  ```
+  ```javascript
   const options = { readConcern: { level: "majority" }, writeConcern: { w: "majority" } };
   productsCollection.updateOne({ "sku": "12345" }, { "$set": { "price": 200 } }, options);
   ```
@@ -686,7 +687,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Atomic Operations**: MongoDB supports atomic operations on a single document, meaning that all changes to a document are completed successfully or not at all. This ensures the consistency of data at the document level.
 
   Example:
-  ```
+  ```javascript
   db.products.updateOne({ "sku": "12345" }, { "$inc": { "stock": -1 } })
   ```
 
@@ -695,7 +696,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Transactions for Multi-Document Consistency**: For operations spanning multiple documents or collections, MongoDB provides transactions. Transactions allow multiple operations to be grouped together in an atomic unit, ensuring that changes are either committed or rolled back as a whole.
 
   Example:
-  ```
+  ```javascript
   const session = client.startSession();
   session.startTransaction();
   const ordersCollection = client.db("ecommerce").collection("orders");
@@ -713,7 +714,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Validation Rules**: MongoDB provides schema validation features that help enforce data integrity by ensuring that documents adhere to specified rules before they are inserted or updated. You can define validation rules for specific fields, such as types, ranges, or presence.
 
   Example:
-  ```
+  ```javascript
   db.createCollection("products", {
     validator: {
       $jsonSchema: {
@@ -734,7 +735,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Write Concern**: Write concern defines the level of acknowledgment requested from MongoDB for write operations. It ensures that data is written to the specified number of nodes (e.g., primary, secondary) before returning acknowledgment, improving data consistency.
 
   Example:
-  ```
+  ```javascript
   db.products.insertOne({ "sku": "12345", "name": "Product A", "price": 100 }, { writeConcern: { w: "majority" } })
   ```
 
@@ -743,7 +744,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Read Concern**: Read concern defines the consistency level for read operations. MongoDB provides different read concern levels, such as `local`, `majority`, and `linearizable`, which control the visibility of data based on its replication state.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ "sku": "12345" }).readConcern("majority")
   ```
 
@@ -752,7 +753,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Data Integrity in Sharded Clusters**: In sharded clusters, MongoDB ensures data consistency across shards. The sharding key plays a crucial role in maintaining consistency by ensuring that related data is grouped together on the same shard. Additionally, transactions can span multiple shards to maintain consistency across distributed data.
 
   Example:
-  ```
+  ```javascript
   db.products.createIndex({ "category": 1 })
   db.products.shardCollection("products", { "category": 1 })
   ```
@@ -762,7 +763,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Optimistic Concurrency Control**: MongoDB uses an optimistic concurrency control model to handle concurrent updates to documents. If two operations try to modify the same document at the same time, MongoDB detects the conflict and throws an error, allowing the application to handle the conflict.
 
   Example:
-  ```
+  ```javascript
   db.products.updateOne({ "sku": "12345", "stock": { "$gte": 1 } }, { "$inc": { "stock": -1 } })
   ```
 
@@ -771,7 +772,7 @@ MongoDB provides mechanisms to maintain data integrity and consistency in variou
 - **Handling Data Corruption**: In case of data corruption, MongoDB offers tools like `mongorestore` and `fsync` to ensure data consistency during backups and recovery processes.
 
   Example:
-  ```
+  ```javascript
   mongorestore --drop --dir /data/backup
   ```
 
@@ -789,7 +790,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **mongodump**: The `mongodump` tool is used to create a binary backup of MongoDB data. It can be used to back up the entire database or specific collections.
 
   Example:
-  ```
+  ```javascript
   mongodump --uri="mongodb://localhost:27017" --out=/data/backup
   ```
 
@@ -798,7 +799,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Backing up a Specific Database**: If you want to back up a specific database, you can use the `--db` option with `mongodump`.
 
   Example:
-  ```
+  ```javascript
   mongodump --uri="mongodb://localhost:27017" --db=ecommerce --out=/data/backup
   ```
 
@@ -807,7 +808,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Backing up a Specific Collection**: You can also back up individual collections using the `--collection` option.
 
   Example:
-  ```
+  ```javascript
   mongodump --uri="mongodb://localhost:27017" --db=ecommerce --collection=products --out=/data/backup
   ```
 
@@ -816,7 +817,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **mongorestore**: The `mongorestore` tool is used to restore data from a backup created with `mongodump`. It can restore the entire backup or specific collections from the backup.
 
   Example:
-  ```
+  ```javascript
   mongorestore --uri="mongodb://localhost:27017" --dir=/data/backup
   ```
 
@@ -825,7 +826,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Restoring a Specific Database**: If you want to restore a specific database from a backup, use the `--db` option with `mongorestore`.
 
   Example:
-  ```
+  ```javascript
   mongorestore --uri="mongodb://localhost:27017" --db=ecommerce --dir=/data/backup/ecommerce
   ```
 
@@ -834,7 +835,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Restoring a Specific Collection**: You can restore an individual collection from the backup using the `--collection` option.
 
   Example:
-  ```
+  ```javascript
   mongorestore --uri="mongodb://localhost:27017" --db=ecommerce --collection=products --dir=/data/backup/ecommerce/products.bson
   ```
 
@@ -843,7 +844,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Backup with Authentication**: If your MongoDB instance is secured with authentication, you will need to provide the appropriate credentials when backing up the data.
 
   Example:
-  ```
+  ```javascript
   mongodump --uri="mongodb://username:password@localhost:27017" --out=/data/backup
   ```
 
@@ -852,7 +853,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Restore with Authentication**: Similarly, when restoring data to a secured MongoDB instance, you need to supply authentication credentials.
 
   Example:
-  ```
+  ```javascript
   mongorestore --uri="mongodb://username:password@localhost:27017" --dir=/data/backup
   ```
 
@@ -861,7 +862,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Incremental Backup and Restore**: For more advanced backup strategies, you can use the `--oplog` option with `mongodump` to create incremental backups by capturing the operation log (oplog). This is particularly useful for backing up data in a replica set.
 
   Example:
-  ```
+  ```javascript
   mongodump --uri="mongodb://localhost:27017" --oplog --out=/data/backup
   ```
 
@@ -870,7 +871,7 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Point-in-Time Restore**: After creating an oplog-based backup, you can restore the data up to a specific point in time.
 
   Example:
-  ```
+  ```javascript
   mongorestore --uri="mongodb://localhost:27017" --oplogReplay --dir=/data/backup
   ```
 
@@ -879,14 +880,14 @@ MongoDB provides several tools and methods for backing up and restoring data. Th
 - **Backup and Restore with Compression**: You can also compress the backup files to save storage space by using the `--gzip` option with both `mongodump` and `mongorestore`.
 
   Example:
-  ```
+  ```javascript
   mongodump --uri="mongodb://localhost:27017" --out=/data/backup --gzip
   ```
 
   This command creates a compressed backup of the MongoDB instance.
 
   Example:
-  ```
+  ```javascript
   mongorestore --uri="mongodb://localhost:27017" --dir=/data/backup --gzip
   ```
 
@@ -903,7 +904,7 @@ Securing a MongoDB instance is crucial to protect sensitive data. MongoDB provid
 - **Authentication**: MongoDB supports various authentication mechanisms such as SCRAM (Salted Challenge Response Authentication Mechanism), LDAP (Lightweight Directory Access Protocol), and X.509 certificates.
 
   Example: Enabling authentication with SCRAM.
-  ```
+  ```javascript
   # Edit the mongod.conf file and set authorization to "enabled"
   security:
     authorization: "enabled"
@@ -914,7 +915,7 @@ Securing a MongoDB instance is crucial to protect sensitive data. MongoDB provid
 - **Creating Users**: You can create users with specific roles and permissions to limit access to certain resources within MongoDB.
 
   Example:
-  ```
+  ```javascript
   db.createUser({
     user: "admin",
     pwd: "password123",
@@ -927,7 +928,7 @@ Securing a MongoDB instance is crucial to protect sensitive data. MongoDB provid
 - **Role-Based Access Control (RBAC)**: MongoDB uses RBAC to control access. You can assign specific roles to users, granting them only the permissions they need.
 
   Example: Creating a read-only user.
-  ```
+  ```javascript
   db.createUser({
     user: "readonlyUser",
     pwd: "readonlyPassword",
@@ -942,21 +943,21 @@ Securing a MongoDB instance is crucial to protect sensitive data. MongoDB provid
   - **Encryption at Rest**: You can enable encryption at rest by configuring the `--encryptionKeyFile` parameter.
 
     Example:
-    ```
+    ```javascript
     mongod --encryptionKeyFile /path/to/encryptionKey --dbpath /data/db
     ```
 
   - **Encryption in Transit**: You can enable TLS/SSL encryption for data in transit by configuring `--sslMode` and `--sslPEMKeyFile`.
 
     Example:
-    ```
+    ```javascript
     mongod --sslMode requireSSL --sslPEMKeyFile /path/to/server.pem
     ```
 
 - **Auditing**: MongoDB provides auditing features to track user actions on the database. You can enable auditing to monitor activities such as user authentication, data access, and changes to the database.
 
   Example:
-  ```
+  ```javascript
   auditLog:
     destination: file
     path: /var/log/mongodb/audit.log
@@ -967,7 +968,7 @@ Securing a MongoDB instance is crucial to protect sensitive data. MongoDB provid
 - **IP Whitelisting**: You can configure MongoDB to allow connections only from specific IP addresses using the `bindIp` option.
 
   Example:
-  ```
+  ```javascript
   net:
     bindIp: 127.0.0.1,192.168.1.10
   ```
@@ -988,7 +989,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
   - **mongostat**: This tool provides statistics about the MongoDB server, including operation counts, memory usage, and network activity.
 
     Example:
-    ```
+    ```javascript
     mongostat --host localhost:27017
     ```
 
@@ -997,7 +998,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
   - **mongotop**: This tool provides insights into the time spent on various database operations and collections.
 
     Example:
-    ```
+    ```javascript
     mongotop --host localhost:27017
     ```
 
@@ -1008,7 +1009,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 - **Database Profiler**: MongoDB provides the database profiler to track slow queries and database operations. You can use it to log performance issues.
 
   Example:
-  ```
+  ```javascript
   db.setProfilingLevel(2)
   db.system.profile.find()
   ```
@@ -1018,7 +1019,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 - **Logs and Error Handling**: MongoDB logs events to its log files. You can check the logs to diagnose issues related to performance, failures, or errors.
 
   Example:
-  ```
+  ```javascript
   tail -f /var/log/mongodb/mongod.log
   ```
 
@@ -1027,7 +1028,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 - **Profiler for Specific Query**: You can use the profiler to capture slow queries for specific collections or operations. This is helpful for identifying performance bottlenecks.
 
   Example:
-  ```
+  ```javascript
   db.setProfilingLevel(1, { slowms: 100 })
   db.system.profile.find({ millis: { $gt: 100 } })
   ```
@@ -1037,7 +1038,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 - **Using Logs for Debugging**: MongoDB logs errors and events to help diagnose issues. By reading the logs, you can identify configuration errors, slow queries, or replication issues.
 
   Example:
-  ```
+  ```javascript
   tail -f /var/log/mongodb/mongod.log | grep "error"
   ```
 
@@ -1046,7 +1047,7 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 - **Query Debugging with `explain()`**: You can use the `explain()` method to get detailed information about how MongoDB executes queries. This is helpful for optimizing queries.
 
   Example:
-  ```
+  ```javascript
   db.products.find({ sku: "abc123" }).explain("executionStats")
   ```
 
@@ -1055,7 +1056,193 @@ MongoDB provides a variety of tools and techniques for monitoring the performanc
 ----
 
 
+<div id="t13"></div>
 
+# MongoDB Aggregation Practice Questions [↑](#topics-covered)
+
+## Part 1: Basic Aggregation
+
+### Dataset
+
+```javascript
+[
+{ _id: 1, customer: "Amit",   amount: 500,  status: "done",    city: "Mumbai" },
+{ _id: 2, customer: "Vivek",  amount: 800,  status: "pending", city: "Delhi" },
+{ _id: 3, customer: "Amit",   amount: 300,  status: "done",    city: "Mumbai" },
+{ _id: 4, customer: "Neha",   amount: 1200, status: "done",    city: "Bangalore" },
+{ _id: 5, customer: "Vivek",  amount: 200,  status: "done",    city: "Delhi" },
+{ _id: 6, customer: "Amit",   amount: 700,  status: "pending", city: "Mumbai" },
+{ _id: 7, customer: "Neha",   amount: 1000, status: "done",    city: "Bangalore" }
+]
+```
+
+### Questions and Answers
+
+1. **Find the total sales amount for each order status. Group the orders based on their `status` and calculate the sum of the `amount` for each status.**
+   ```javascript
+   db.orders.aggregate([{ $group: { _id: "$status", totalSum: { $sum: "$amount" } } }])
+   ```
+
+2. **Calculate the total sales for each customer. Group the orders by `customer` and sum the `amount` of all their orders.**
+   ```javascript
+   db.orders.aggregate([{ $group: { _id: "$customer", totalSum: { $sum: "$amount" } } }])
+   ```
+
+3. **Determine the average order amount for each city. Group the orders by `city` and calculate the average `amount` for each city.**
+   ```javascript
+   db.orders.aggregate([{ $group: { _id: "$city", averageAmount: { $avg: "$amount" } } }])
+   ```
+
+4. **Find the maximum order amount placed by each customer. Group the orders by `customer` and get the highest `amount` for each customer.**
+   ```javascript
+   db.orders.aggregate([{ $group: { _id: "$customer", maxAmount: { $max: "$amount" } } }])
+   ```
+
+5. **Count the total number of orders placed in each city. Group by `city` and count the number of orders for each.**
+   ```javascript
+   db.orders.aggregate([{ $group: { _id: "$city", count: { $sum: 1 } } }])
+   ```
+
+6. **Calculate total sales per customer and include only those customers whose total sales are greater than 1000.**
+   ```javascript
+   db.orders.aggregate([
+   { $group: { _id: "$customer", totalSum: { $sum: "$amount" } } },
+   { $match: { totalSum: { $gt: 1000 } } }
+   ])
+   ```
+
+7. **Find the total amount of sales for each city and sort the results in descending order of total sales.**
+   ```javascript
+   db.orders.aggregate([
+   { $group: { _id: "$city", totalSum: { $sum: "$amount" } } },
+   { $sort: { totalSum: -1 } }
+   ])
+   ```
+
+8. **Calculate the average order amount per city and rename the output fields. The city name should be under `city_name` and the average amount under `average_order_value`.**
+   ```javascript
+   db.orders.aggregate([
+   { $group: { _id: "$city", average_order_value: { $avg: "$amount" } } },
+   { $project: { _id: 0, city_name: "$_id", average_order_value: 1 } }
+   ])
+   ```
+
+9. **Calculate the total amount for each combination of city and status. Group by both `city` and `status` and sum the `amount`.**
+   ```javascript
+   db.orders.aggregate([
+   { $group: { _id: { city: "$city", status: "$status" }, totalSum: { $sum: "$amount" } } }
+   ])
+   ```
+
+10. **For each customer, calculate both the total amount and the average order amount in a single aggregation.**
+    ```
+    db.orders.aggregate([
+    { $group: { _id: "$customer", totalSum: { $sum: "$amount" }, average_order_value: { $avg: "$amount" } } }
+    ])
+    ```
+
+---
+
+## Part 2: Intermediate Aggregation
+
+### Dataset
+
+```javascript
+db.orders1.insertMany([
+{ _id: 1, customer: "Amit",   city: "Mumbai",     items: [ { product: "Shoes", qty: 2, price: 100 }, { product: "Watch", qty: 1, price: 300 } ], status: "done" },
+{ _id: 2, customer: "Vivek",  city: "Delhi",      items: [ { product: "Shirt", qty: 3, price: 200 } ], status: "pending" },
+{ _id: 3, customer: "Amit",   city: "Mumbai",     items: [ { product: "Watch", qty: 1, price: 300 } ], status: "done" },
+{ _id: 4, customer: "Neha",   city: "Bangalore",  items: [ { product: "Shoes", qty: 1, price: 500 }, { product: "Watch", qty: 1, price: 700 } ], status: "done" },
+{ _id: 5, customer: "Vivek",  city: "Delhi",      items: [ { product: "Shoes", qty: 2, price: 150 } ], status: "done" },
+{ _id: 6, customer: "Amit",   city: "Mumbai",     items: [ { product: "Shirt", qty: 1, price: 200 } ], status: "pending" },
+{ _id: 7, customer: "Neha",   city: "Bangalore",  items: [ { product: "Shoes", qty: 1, price: 500 } ], status: "done" }
+])
+```
+
+### Questions and Answers
+
+1. **Find the total number of orders placed in each city where the order status is 'done'.**
+   ```javascript
+   db.orders1.aggregate([
+   { $match: { status: "done" } },
+   { $group: { _id: "$city", count: { $sum: 1 } } }
+   ])
+   ```
+
+2. **Calculate the total quantity sold for each product across all orders.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: "$items.product", count: { $sum: "$items.qty" } } }
+   ])
+   ```
+
+3. **Calculate the total revenue generated by each product. Multiply quantity and price for each item and then sum for each product.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: "$items.product", cost: { $sum: { $multiply: ["$items.qty", "$items.price"] } } } }
+   ])
+   ```
+
+4. **Calculate the total amount spent by each customer across all their orders.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: "$customer", cost: { $sum: { $multiply: ["$items.qty", "$items.price"] } } } }
+   ])
+   ```
+
+5. **Identify the top 2 customers by total spend.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: "$customer", cost: { $sum: { $multiply: ["$items.qty", "$items.price"] } } } },
+   { $sort: { cost: -1 } },
+   { $limit: 2 }
+   ])
+   ```
+
+6. **Calculate the total revenue for each city and include only those cities where total revenue exceeds 1000.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: "$city", cost: { $sum: { $multiply: ["$items.qty", "$items.price"] } } } },
+   { $match: { cost: { $gt: 1000 } } }
+   ])
+   ```
+
+7. **Add a new field `orderTotal` to each order that contains the sum of (quantity * price) for all items in that order.**
+   ```javascript
+   db.orders1.aggregate([
+   { $addFields: { orderTotal: { $sum: { $map: { input: "$items", as: "i", in: { $multiply: ["$$i.qty", "$$i.price"] } } } } } }
+   ])
+   ```
+
+8. **List all distinct products purchased by each customer.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: "$customer", products: { $addToSet: "$items.product" } } }
+   ])
+   ```
+
+9. **Calculate the total revenue generated for each combination of city and product.**
+   ```javascript
+   db.orders1.aggregate([
+   { $unwind: "$items" },
+   { $group: { _id: { city: "$city", product: "$items.product" }, cost: { $sum: { $multiply: ["$items.qty", "$items.price"] } } } },
+   { $match: { cost: { $gt: 10 } } }
+   ])
+   ```
+
+9. **Find average item price per product (irrespective of qty).**
+   ```javascript
+    db.orders1.aggregate([
+      { $unwind: "$items" },
+      { $group: { _id: "$items.product", average: { $avg: "$items.price" } } }
+    ])
+   ```
 
 
 
